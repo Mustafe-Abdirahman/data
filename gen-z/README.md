@@ -63,7 +63,7 @@ Before any analysis, the dataset was thoroughly cleaned to ensure reliable and u
 
 A custom function was written to loop through all columns and report any null values, making it easy to spot data quality issues before proceeding.
 
-![Null Check Code](img_null_check.png)
+![Null Check Code](screenshots/img_null_check.png)
 
 ```python
 def loop_nulls(df):
