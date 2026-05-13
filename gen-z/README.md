@@ -212,27 +212,6 @@ The scatter plot reveals a clear **negative (downward) trend** — as daily usag
 
 ![Dashboard: Mental Health by Age, Usage Impact, Night vs Day, Country](screenshots/img_dashboard.png)
 
-```python
-fig, axes = plt.subplots(1, 5, figsize=(25, 5))
-
-# Panel 1: Mental Health by Age
-df.groupby('age')['mental_health_score'].mean().plot(ax=axes[0], title='Mental Health by Age')
-
-# Panel 2: Usage Impact
-df.groupby('daily_usage_hours')['mental_health_score'].mean().plot(kind='bar', ax=axes[1], title='Usage Impact')
-
-# Panel 3: Night vs Day
-df.groupby('night_usage')['mental_health_score'].mean().plot(kind='bar', ax=axes[2], title='Night vs Day')
-
-# Panel 4: User % by Country
-df['country'].value_counts(normalize=True).mul(100).plot(kind='pie', ax=axes[3], title='User % by Country')
-
-# Panel 5: Avg Age by Country
-df.groupby('country')['age'].mean().sort_values().plot(kind='barh', ax=axes[4], title='Avg Age by Country')
-
-plt.tight_layout()
-plt.show()
-```
 
 #### 📌 Four-Panel Dashboard Findings
 
@@ -281,9 +260,6 @@ Python 3.x
 📦 gen-z/
 ├── 📄 README.md                             ← You are here
 ├── 📓 GZ.ipynb                              ← Main analysis notebook
-├── 📂 data/
-│   ├── raw_data.csv                         ← Original dataset (1M rows)
-│   └── cleaned_data.csv                    ← Post-cleaning dataset
 ├── 📂 screenshots/
 │   ├── img_null_check.png                  ← Data cleaning: null check code
 │   ├── img_stats_describe.png              ← Data cleaning: descriptive stats
