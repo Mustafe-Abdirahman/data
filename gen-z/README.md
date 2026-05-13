@@ -65,18 +65,6 @@ A custom function was written to loop through all columns and report any null va
 
 ![Null Check Code](screenshots/img_null_check.png)
 
-```python
-def loop_nulls(df):
-    # .items() iterates through (column_name, Series) pairs
-    for column_name, data in df.items():
-        null_count = data.isnull().sum()
-        if null_count > 0:
-            print(f"Column '{column_name}' has {null_count} null values.")
-        else:
-            print(f"Column '{column_name}' is clean!")
-
-loop_nulls(df)
-```
 
 > 💡 This approach gives a **per-column null report**, making it clear which fields need attention before any aggregation or modeling.
 
@@ -86,12 +74,9 @@ loop_nulls(df)
 
 Critical columns were cleaned by dropping rows with null values, then `.describe()` was used to confirm data integrity.
 
-![Stats Describe Output](img_stats_describe.png)
+![Stats Describe Output](screenshots/img_stats_describe.png)
 
-```python
-df = df.dropna(subset=['daily_usage_hours', 'mental_health_score'])
-print(df[['daily_usage_hours', 'mental_health_score']].describe())
-```
+
 
 #### ✅ Key Stats After Cleaning
 
@@ -115,19 +100,9 @@ print(df[['daily_usage_hours', 'mental_health_score']].describe())
 
 > **Question:** How does daily usage hours relate to mental health score in the Gen-Z dataset?
 
-![Daily Usage vs Mental Health Score Scatter Plot](img_scatter_mental_health.png)
+![Daily Usage vs Mental Health Score Scatter Plot](screenshots/img_scatter_mental_health.png)
 
-```python
-import seaborn as sns
-import matplotlib.pyplot as plt
 
-correlation = df['daily_usage_hours'].corr(df['mental_health_score'])
-print(f"Correlation: {correlation:.4f}")
-
-sns.scatterplot(data=df.sample(5000), x='daily_usage_hours', y='mental_health_score', alpha=0.3)
-plt.title("Daily Usage Hours vs Mental Health Score")
-plt.show()
-```
 
 #### 📌 Finding
 
@@ -148,13 +123,9 @@ The scatter plot reveals a clear **negative (downward) trend** — as daily usag
 
 > **Question:** Which countries have the highest average daily social media usage hours in the dataset?
 
-![Gen-Z User Distribution by Country](img_pie_country.png)
+![Gen-Z User Distribution by Country](screenshots/img_pie_country.png)
 
-```python
-country_usage = df.groupby('country')['daily_usage_hours'].mean().sort_values(ascending=False)
-country_pct = df['country'].value_counts(normalize=True) * 100
-print(country_pct)
-```
+
 
 #### 📌 Finding
 
@@ -176,16 +147,9 @@ print(country_pct)
 
 > **Question:** What is the distribution of addiction levels across Entertainment vs Education usage purposes?
 
-![Addiction Level Distribution: Entertainment vs Education](img_addiction_bar.png)
+![Addiction Level Distribution: Entertainment vs Education](screenshots/img_addiction_bar.png)
 
-```python
-addiction_dist = df[df['usage_purpose'].isin(['Entertainment', 'Education'])]
-grouped = addiction_dist.groupby(['usage_purpose', 'addiction_level']).size()
-(grouped / grouped.groupby(level=0).transform('sum') * 100).unstack().plot(kind='bar', figsize=(10, 6))
-plt.title("Addiction Level Distribution: Entertainment vs. Education")
-plt.ylabel("Percentage of Users (%)")
-plt.show()
-```
+
 
 #### 📌 Finding
 
@@ -202,15 +166,9 @@ plt.show()
 
 > **Question:** Which platform has the longest average session duration? Compare `avg_session_minutes` by `primary_platform`.
 
-![Longest Avg Sessions by Platform and Addiction Risk](img_session_addiction.png)
+![Longest Avg Sessions by Platform and Addiction Risk](screenshots/img_session_addiction.png)
 
-```python
-platform_session = df.groupby('primary_platform')['avg_session_minutes'].mean().sort_values(ascending=False)
-platform_session.plot(kind='barh', figsize=(8, 5), colormap='viridis')
-plt.title("Longest Avg Sessions by Platform")
-plt.xlabel("avg_session_minutes")
-plt.show()
-```
+
 
 #### 📌 Session Duration Ranking
 
@@ -230,19 +188,9 @@ plt.show()
 
 > **Question:** How does the mental health score distribute across users of different primary platforms?
 
-![Mental Health Score Distribution by Platform](img_platform_mental_health_dist.png)
+![Mental Health Score Distribution by Platform](screenshots/img_platform_mental_health_dist.png)
 
-```python
-import seaborn as sns
 
-platforms = ['Snapchat', 'Twitter', 'TikTok', 'YouTube', 'Instagram']
-filtered = df[df['primary_platform'].isin(platforms)]
-
-g = sns.FacetGrid(filtered, col='primary_platform', col_wrap=5, height=4)
-g.map(sns.histplot, 'mental_health_score', kde=True, color='steelblue')
-plt.suptitle("Mental Health Score by Platform", y=1.02)
-plt.show()
-```
 
 #### 📌 Finding
 
@@ -262,7 +210,7 @@ plt.show()
 
 > **Question:** What additional patterns emerge around age, night usage, and country-level breakdowns?
 
-![Dashboard: Mental Health by Age, Usage Impact, Night vs Day, Country](img_dashboard.png)
+![Dashboard: Mental Health by Age, Usage Impact, Night vs Day, Country](screenshots/img_dashboard.png)
 
 ```python
 fig, axes = plt.subplots(1, 5, figsize=(25, 5))
@@ -330,13 +278,13 @@ Python 3.x
 ## 📁 Project Structure
 
 ```
-📦 genz-social-media-analysis/
+📦 gen-z/
 ├── 📄 README.md                             ← You are here
 ├── 📓 GZ.ipynb                              ← Main analysis notebook
 ├── 📂 data/
 │   ├── raw_data.csv                         ← Original dataset (1M rows)
 │   └── cleaned_data.csv                    ← Post-cleaning dataset
-├── 📂 visualizations/
+├── 📂 screenshots/
 │   ├── img_null_check.png                  ← Data cleaning: null check code
 │   ├── img_stats_describe.png              ← Data cleaning: descriptive stats
 │   ├── img_scatter_mental_health.png       ← Q1: Daily Usage vs Mental Health
@@ -345,8 +293,7 @@ Python 3.x
 │   ├── img_session_addiction.png           ← Q4: Session Duration by Platform
 │   ├── img_platform_mental_health_dist.png ← Q5: Mental Health by Platform
 │   └── img_dashboard.png                  ← Q6: Multi-panel Dashboard
-└── 📂 results/
-    └── summary_stats.csv                   ← Aggregated findings export
+
 ```
 
 ---
